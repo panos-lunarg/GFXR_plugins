@@ -23,12 +23,8 @@
 #ifndef GFXRECON_PERFETTO_TRACING_CATEGORIES_H
 #define GFXRECON_PERFETTO_TRACING_CATEGORIES_H
 
-#if !defined(WIN32)
-
 #include "perfetto.h"
 
 PERFETTO_DEFINE_CATEGORIES(perfetto::Category("GFXR").SetDescription("GFXR Queue submissions"));
-
-#endif
 
 #endif /* GFXRECON_PERFETTO_TRACING_CATEGORIES_H */

@@ -33,11 +33,11 @@ target_sources(gfxrecon_perfetto_replay_plugin
                     ${CMAKE_CURRENT_LIST_DIR}/perfetto_replay_commands.cpp
                     ${CMAKE_CURRENT_LIST_DIR}/perfetto_replay_commands.h
                     ${CMAKE_CURRENT_LIST_DIR}/perfetto_entrypoints_post.cpp
-                    ${CMAKE_CURRENT_LIST_DIR}/../../includes/replay/plugins_entrypoints_post.h
                     ${CMAKE_CURRENT_LIST_DIR}/perfetto_entrypoints_pre.cpp
-                    ${CMAKE_CURRENT_LIST_DIR}/../../includes/replay/plugins_entrypoints_pre.h
                     ${CMAKE_CURRENT_LIST_DIR}/../perfetto_tracing_categories.h
                     ${CMAKE_CURRENT_LIST_DIR}/../perfetto_tracing_categories.cpp
+                    ${CMAKE_SOURCE_DIR}/plugins/includes/capture/plugins_entrypoints_post.h
+                    ${CMAKE_SOURCE_DIR}/plugins/includes/capture/plugins_entrypoints_pre.h
 )
 
 target_compile_definitions(gfxrecon_perfetto_replay_plugin PRIVATE VK_NO_PROTOTYPES VK_ENABLE_BETA_EXTENSIONS)
@@ -45,7 +45,7 @@ target_compile_definitions(gfxrecon_perfetto_replay_plugin PRIVATE VK_NO_PROTOTY
 target_include_directories(gfxrecon_perfetto_replay_plugin
                            PUBLIC
                                ${CMAKE_SOURCE_DIR}/plugins
-                               ${CMAKE_SOURCE_DIR}/plugins/external/perfetto/sdk
+                               ${CMAKE_CURRENT_LIST_DIR}/../../external/perfetto/sdk
                                ${CMAKE_SOURCE_DIR}/external/Vulkan-Headers/include
                                ${CMAKE_SOURCE_DIR}/framework)
 
