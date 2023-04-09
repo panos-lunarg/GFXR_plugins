@@ -25,6 +25,8 @@
 #include "../perfetto_tracing_categories.h"
 #include "util/defines.h"
 
+#include <sstream>
+
 GFXRECON_BEGIN_NAMESPACE(gfxrecon)
 GFXRECON_BEGIN_NAMESPACE(plugins)
 GFXRECON_BEGIN_NAMESPACE(capture)
@@ -55,8 +57,11 @@ void PreProcess_QueueSubmit(
 
         for (uint32_t i = 0; i < pSubmits->commandBufferCount; ++i)
         {
-            ctx.AddDebugAnnotation<perfetto::DynamicString, void*>(
-                perfetto::DynamicString{ "vkCommandBuffer: " + std::to_string(i) }, pSubmits->pCommandBuffers[i]);
+            std::stringstream cmd_buf_ptr;
+            cmd_buf_ptr << std::hex << pSubmits->pCommandBuffers[i];
+            ctx.AddDebugAnnotation<perfetto::DynamicString, perfetto::DynamicString>(
+                perfetto::DynamicString{ "vkCommandBuffer: " + std::to_string(i) },
+                perfetto::DynamicString(cmd_buf_ptr.str()));
         }
     });
 }

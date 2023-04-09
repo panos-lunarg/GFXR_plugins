@@ -24,13 +24,10 @@
 #ifndef GFXRECON_PLUGINS_PERFETTO_VULKAN_REPLAY_COMMANDS_H
 #define GFXRECON_PLUGINS_PERFETTO_VULKAN_REPLAY_COMMANDS_H
 
+#include "includes/replay/plugins_entrypoints_general.h"
 #include "format/api_call_id.h"
 #include "vulkan/vulkan.h"
 #include "decode/api_decoder.h"
-#include "decode/struct_pointer_decoder.h"
-#include "decode/handle_pointer_decoder.h"
-#include "generated/generated_vulkan_struct_decoders.h"
-#include "generated/generated_vulkan_struct_handle_wrappers.h"
 #include "util/defines.h"
 
 GFXRECON_BEGIN_NAMESPACE(gfxrecon)
@@ -75,6 +72,8 @@ void PreProcess_QueuePresent(const ApiCallInfo&      call_info,
                              VkResult                returnValue,
                              VkQueue                 queue,
                              const VkPresentInfoKHR* pPresentInfo);
+
+void Process_AddStateInformation(const StateInformation* obj);
 
 template <>
 struct PerfettoReplayPreCall<format::ApiCallId::ApiCall_vkCreateInstance>
