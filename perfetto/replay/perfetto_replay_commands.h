@@ -37,24 +37,6 @@ GFXRECON_BEGIN_NAMESPACE(plugin_perfetto)
 
 using namespace decode;
 
-template <format::ApiCallId Id>
-struct PerfettoReplayPreCall
-{
-    template <typename... Args>
-    static void Dispatch(const ApiCallInfo&, VkResult, Args...)
-    {}
-};
-
-template <format::ApiCallId Id>
-struct PerfettoEncoderPostCall
-{
-    template <typename... Args>
-    static void Dispatch(const ApiCallInfo&, VkResult, Args...)
-    {}
-};
-
-#if !defined(WIN32)
-
 void PreProcess_CreateInstance(const ApiCallInfo&           call_info,
                                VkResult                     returnValue,
                                const VkInstanceCreateInfo*  pCreateInfo,
@@ -74,38 +56,6 @@ void PreProcess_QueuePresent(const ApiCallInfo&      call_info,
                              const VkPresentInfoKHR* pPresentInfo);
 
 void Process_AddStateInformation(const StateInformation* obj);
-
-template <>
-struct PerfettoReplayPreCall<format::ApiCallId::ApiCall_vkCreateInstance>
-{
-    template <typename... Args>
-    static void Dispatch(const ApiCallInfo& call_info, VkResult result, Args... args)
-    {
-        PreProcess_CreateInstance(call_info, result, args...);
-    }
-};
-
-template <>
-struct PerfettoReplayPreCall<format::ApiCallId::ApiCall_vkQueuePresentKHR>
-{
-    template <typename... Args>
-    static void Dispatch(const ApiCallInfo& call_info, Args... args)
-    {
-        PreProcess_QueuePresent(call_info, args...);
-    }
-};
-
-template <>
-struct PerfettoReplayPreCall<format::ApiCallId::ApiCall_vkQueueSubmit>
-{
-    template <typename... Args>
-    static void Dispatch(const ApiCallInfo& call_info, Args... args)
-    {
-        PreProcess_QueueSubmit(call_info, args...);
-    }
-};
-
-#endif // !defined(WIN32)
 
 GFXRECON_END_NAMESPACE(plugin_perfetto)
 GFXRECON_END_NAMESPACE(replay)

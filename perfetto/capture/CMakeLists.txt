@@ -1,6 +1,6 @@
 ###############################################################################
-# Copyright (c) 2018-2022 LunarG, Inc.
-# Copyright (c) 2019-2022 Advanced Micro Devices, Inc.
+# Copyright (c) 2023 Valve Corporation
+# Copyright (c) 2023 LunarG, Inc.
 # All rights reserved
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,8 +30,8 @@ add_library(gfxrecon_perfetto_capture_plugin SHARED "")
 
 target_sources(gfxrecon_perfetto_capture_plugin
                PRIVATE
-                    ${CMAKE_CURRENT_LIST_DIR}/perfetto_encoder_commands.cpp
-                    ${CMAKE_CURRENT_LIST_DIR}/perfetto_encoder_commands.h
+                    ${CMAKE_CURRENT_LIST_DIR}/perfetto_capture_commands.cpp
+                    ${CMAKE_CURRENT_LIST_DIR}/perfetto_capture_commands.h
                     ${CMAKE_CURRENT_LIST_DIR}/perfetto_entrypoints_post.cpp
                     ${CMAKE_CURRENT_LIST_DIR}/perfetto_entrypoints_pre.cpp
                     ${CMAKE_CURRENT_LIST_DIR}/../perfetto_tracing_categories.h

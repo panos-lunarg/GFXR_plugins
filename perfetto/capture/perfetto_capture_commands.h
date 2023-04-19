@@ -1,6 +1,6 @@
 /*
-** Copyright (c) 2018-2021 Valve Corporation
-** Copyright (c) 2018-2022 LunarG, Inc.
+** Copyright (c) 2023 Valve Corporation
+** Copyright (c) 2023 LunarG, Inc.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a
 ** copy of this software and associated documentation files (the "Software"),
@@ -35,72 +35,12 @@ GFXRECON_BEGIN_NAMESPACE(plugins)
 GFXRECON_BEGIN_NAMESPACE(capture)
 GFXRECON_BEGIN_NAMESPACE(plugin_perfetto)
 
-template <format::ApiCallId Id>
-struct PerfettoEncoderPreCall
-{
-    template <typename... Args>
-    static void Dispatch(uint64_t, Args...)
-    {}
-};
-
-template <format::ApiCallId Id>
-struct PerfettoEncoderPostCall
-{
-    template <typename... Args>
-    static void Dispatch(uint64_t, Args...)
-    {}
-
-    template <typename... Args>
-    static void Dispatch(uint64_t, VkResult, Args...)
-    {}
-};
-
 void InitializePerfetto();
+
 void PreProcess_QueueSubmit(
     uint64_t block_index, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence);
+
 void PreProcess_QueuePresent(uint64_t block_index, VkQueue queue, const VkPresentInfoKHR* pPresentInfo);
-
-template <>
-struct PerfettoEncoderPreCall<format::ApiCallId::ApiCall_vkCreateInstance>
-{
-    template <typename... Args>
-    static void Dispatch(uint64_t block_index, Args... args)
-    {
-        InitializePerfetto();
-    }
-};
-
-template <>
-struct PerfettoEncoderPostCall<format::ApiCallId::ApiCall_vkCreateInstance>
-{
-    template <typename... Args>
-    static void Dispatch(uint64_t block_index, VkResult result, Args... args)
-    {
-        InitializePerfetto();
-    }
-};
-
-template <>
-struct PerfettoEncoderPreCall<format::ApiCallId::ApiCall_vkQueuePresentKHR>
-{
-    template <typename... Args>
-    static void Dispatch(uint64_t block_index, Args... args)
-    {
-        PreProcess_QueuePresent(block_index, args...);
-    }
-};
-
-template <>
-struct PerfettoEncoderPreCall<format::ApiCallId::ApiCall_vkQueueSubmit>
-{
-    template <typename... Args>
-    static void Dispatch(uint64_t block_index, Args... args)
-    {
-        assert(block_index);
-
-        PreProcess_QueueSubmit(block_index, args...);
-    }
-};
 
 GFXRECON_END_NAMESPACE(plugin_perfetto)
 GFXRECON_END_NAMESPACE(capture)

@@ -1,6 +1,6 @@
 /*
-** Copyright (c) 2018-2021 Valve Corporation
-** Copyright (c) 2018-2022 LunarG, Inc.
+** Copyright (c) 2023 Valve Corporation
+** Copyright (c) 2023 LunarG, Inc.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a
 ** copy of this software and associated documentation files (the "Software"),
@@ -22,7 +22,7 @@
 */
 
 #include "includes/capture/plugins_entrypoints_pre.h"
-#include "perfetto_encoder_commands.h"
+#include "perfetto_capture_commands.h"
 #include "format/api_call_id.h"
 
 GFXRECON_BEGIN_NAMESPACE(gfxrecon)
@@ -37,23 +37,25 @@ extern "C"
                                                       const VkAllocationCallbacks* pAllocator,
                                                       VkInstance*                  pInstance)
     {
-        PerfettoEncoderPreCall<format::ApiCallId::ApiCall_vkCreateInstance>::Dispatch(
-            block_index, pCreateInfo, pAllocator, pInstance);
+        GFXRECON_UNREFERENCED_PARAMETER(block_index);
+        GFXRECON_UNREFERENCED_PARAMETER(pCreateInfo);
+        GFXRECON_UNREFERENCED_PARAMETER(pAllocator);
+        GFXRECON_UNREFERENCED_PARAMETER(pInstance);
+
+        InitializePerfetto();
     }
 
     VKAPI_ATTR void VKAPI_CALL QueueSubmit_PreCall(
         uint64_t block_index, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence)
     {
-        PerfettoEncoderPreCall<format::ApiCallId::ApiCall_vkQueueSubmit>::Dispatch(
-            block_index, queue, submitCount, pSubmits, fence);
+        PreProcess_QueueSubmit(block_index, queue, submitCount, pSubmits, fence);
     }
 
     VKAPI_ATTR void VKAPI_CALL QueuePresentKHR_PreCall(uint64_t                block_index,
                                                        VkQueue                 queue,
                                                        const VkPresentInfoKHR* pPresentInfo)
     {
-        PerfettoEncoderPreCall<format::ApiCallId::ApiCall_vkQueuePresentKHR>::Dispatch(
-            block_index, queue, pPresentInfo);
+        PreProcess_QueuePresent(block_index, queue, pPresentInfo);
     }
 } // extern "C"
 

@@ -1,6 +1,6 @@
 /*
-** Copyright (c) 2018-2021 Valve Corporation
-** Copyright (c) 2018-2022 LunarG, Inc.
+** Copyright (c) 2023 Valve Corporation
+** Copyright (c) 2023 LunarG, Inc.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a
 ** copy of this software and associated documentation files (the "Software"),
@@ -22,7 +22,7 @@
 */
 
 #include "includes/capture/plugins_entrypoints_post.h"
-#include "perfetto_encoder_commands.h"
+#include "perfetto_capture_commands.h"
 #include "format/api_call_id.h"
 
 GFXRECON_BEGIN_NAMESPACE(gfxrecon)
@@ -38,8 +38,12 @@ extern "C"
                                                        const VkAllocationCallbacks* pAllocator,
                                                        VkInstance*                  pInstance)
     {
-        PerfettoEncoderPostCall<format::ApiCallId::ApiCall_vkCreateInstance>::Dispatch(
-            block_index, result, pCreateInfo, pAllocator, pInstance);
+        GFXRECON_UNREFERENCED_PARAMETER(block_index);
+        GFXRECON_UNREFERENCED_PARAMETER(pCreateInfo);
+        GFXRECON_UNREFERENCED_PARAMETER(pAllocator);
+        GFXRECON_UNREFERENCED_PARAMETER(pInstance);
+
+        InitializePerfetto();
     }
 } // extern "C"
 

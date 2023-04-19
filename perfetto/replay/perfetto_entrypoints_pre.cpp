@@ -38,8 +38,7 @@ extern "C"
                                                       const VkAllocationCallbacks* pAllocator,
                                                       VkInstance*                  pInstance)
     {
-        PerfettoReplayPreCall<format::ApiCallId::ApiCall_vkCreateInstance>::Dispatch(
-            call_info, returnValue, pCreateInfo, pAllocator, pInstance);
+        PreProcess_CreateInstance(call_info, returnValue, pCreateInfo, pAllocator, pInstance);
     }
 
     VKAPI_ATTR void VKAPI_CALL QueueSubmit_PreCall(const ApiCallInfo&  call_info,
@@ -49,8 +48,7 @@ extern "C"
                                                    const VkSubmitInfo* pSubmits,
                                                    VkFence             fence)
     {
-        PerfettoReplayPreCall<format::ApiCallId::ApiCall_vkQueueSubmit>::Dispatch(
-            call_info, returnValue, queue, submitCount, pSubmits, fence);
+        PreProcess_QueueSubmit(call_info, returnValue, queue, submitCount, pSubmits, fence);
     }
 
     VKAPI_ATTR void VKAPI_CALL QueuePresentKHR_PreCall(const ApiCallInfo&      call_info,
@@ -58,8 +56,7 @@ extern "C"
                                                        VkQueue                 queue,
                                                        const VkPresentInfoKHR* pPresentInfo)
     {
-        PerfettoReplayPreCall<format::ApiCallId::ApiCall_vkQueuePresentKHR>::Dispatch(
-            call_info, returnValue, queue, pPresentInfo);
+        PreProcess_QueuePresent(call_info, returnValue, queue, pPresentInfo);
     }
 } // extern "C"
 

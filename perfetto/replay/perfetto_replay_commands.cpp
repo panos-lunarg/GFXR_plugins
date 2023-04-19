@@ -74,29 +74,36 @@ void PreProcess_QueueSubmit(const ApiCallInfo&  call_info,
                             const VkSubmitInfo* pSubmits,
                             VkFence             fence)
 {
-    TRACE_EVENT_INSTANT("GFXR", "vkQueueSubmit", [&](perfetto::EventContext ctx) {
-        ctx.AddDebugAnnotation("vkQueueSubmit:", call_info.index);
+    if (pSubmits)
+    {
+        TRACE_EVENT_INSTANT("GFXR", "vkQueueSubmit", [&](perfetto::EventContext ctx) {
+            ctx.AddDebugAnnotation("vkQueueSubmit:", call_info.index);
 
-        uint32_t cmd_buf_count = 0;
-        for (uint32_t s = 0; s < submitCount; ++s)
-        {
-            for (uint32_t c = 0; c < pSubmits[s].commandBufferCount; ++c)
+            uint32_t cmd_buf_count = 0;
+            for (uint32_t s = 0; s < submitCount; ++s)
             {
-                const auto cmd_buf_info = vulkan_objects.find(
-                    GFXRECON_PTR_TO_UINT<VkCommandBuffer, uint64_t>(pSubmits[s].pCommandBuffers[c]));
-
-                if (cmd_buf_info != vulkan_objects.end())
+                for (uint32_t c = 0; c < pSubmits[s].commandBufferCount; ++c)
                 {
-                    std::stringstream id;
-                    id << "0x" << std::hex << cmd_buf_info->second.capture_handle
-                       << " (id: " << cmd_buf_info->second.capture_id << ")";
-                    ctx.AddDebugAnnotation(
-                        perfetto::DynamicString{ "vkCommandBuffer: " + std::to_string(cmd_buf_count++) },
-                        perfetto::DynamicString{ id.str() });
+                    const auto cmd_buf_info = vulkan_objects.find(
+                        GFXRECON_PTR_TO_UINT<VkCommandBuffer, uint64_t>(pSubmits[s].pCommandBuffers[c]));
+
+                    if (cmd_buf_info != vulkan_objects.end())
+                    {
+                        std::stringstream id;
+                        id << "0x" << std::hex << cmd_buf_info->second.capture_handle
+                           << " (id: " << cmd_buf_info->second.capture_id << ")";
+                        ctx.AddDebugAnnotation(
+                            perfetto::DynamicString{ "vkCommandBuffer: " + std::to_string(cmd_buf_count++) },
+                            perfetto::DynamicString{ id.str() });
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+    else
+    {
+        TRACE_EVENT_INSTANT("GFXR", "vkQueueSubmit (empty)", [&](perfetto::EventContext ctx) {});
+    }
 }
 
 void PreProcess_QueuePresent(const ApiCallInfo&      call_info,

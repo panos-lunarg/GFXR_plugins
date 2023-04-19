@@ -1,4 +1,5 @@
 /*
+** Copyright (c) 2023 Valve Corporation
 ** Copyright (c) 2023 LunarG, Inc.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a

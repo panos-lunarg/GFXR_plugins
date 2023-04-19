@@ -42,8 +42,8 @@ add_library(gfxrecon_perfetto_capture_plugin SHARED "")
 
 target_sources(gfxrecon_perfetto_capture_plugin
                PRIVATE
-                    ${GFXRECON_SOURCE_DIR}/plugins/GFXR_plugins/perfetto/capture/perfetto_encoder_commands.cpp
-                    ${GFXRECON_SOURCE_DIR}/plugins/GFXR_plugins/perfetto/capture/perfetto_encoder_commands.h
+                    ${GFXRECON_SOURCE_DIR}/plugins/GFXR_plugins/perfetto/capture/perfetto_capture_commands.cpp
+                    ${GFXRECON_SOURCE_DIR}/plugins/GFXR_plugins/perfetto/capture/perfetto_capture_commands.h
                     ${GFXRECON_SOURCE_DIR}/plugins/GFXR_plugins/perfetto/capture/perfetto_entrypoints_post.cpp
                     ${GFXRECON_SOURCE_DIR}/plugins/GFXR_plugins/perfetto/capture/perfetto_entrypoints_pre.cpp
                     ${GFXRECON_SOURCE_DIR}/plugins/GFXR_plugins/perfetto/perfetto_tracing_categories.h
