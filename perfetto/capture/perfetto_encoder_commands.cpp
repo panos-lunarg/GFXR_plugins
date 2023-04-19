@@ -52,18 +52,25 @@ void InitializePerfetto()
 void PreProcess_QueueSubmit(
     uint64_t block_index, VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence)
 {
-    TRACE_EVENT_INSTANT("GFXR", "vkQueueSubmit", [&](perfetto::EventContext ctx) {
-        ctx.AddDebugAnnotation(perfetto::DynamicString{ "vkQueueSubmit:" }, block_index);
+    if (pSubmits)
+    {
+        TRACE_EVENT_INSTANT("GFXR", "vkQueueSubmit", [&](perfetto::EventContext ctx) {
+            ctx.AddDebugAnnotation(perfetto::DynamicString{ "vkQueueSubmit:" }, block_index);
 
-        for (uint32_t i = 0; i < pSubmits->commandBufferCount; ++i)
-        {
-            std::stringstream cmd_buf_ptr;
-            cmd_buf_ptr << std::hex << pSubmits->pCommandBuffers[i];
-            ctx.AddDebugAnnotation<perfetto::DynamicString, perfetto::DynamicString>(
-                perfetto::DynamicString{ "vkCommandBuffer: " + std::to_string(i) },
-                perfetto::DynamicString(cmd_buf_ptr.str()));
-        }
-    });
+            for (uint32_t i = 0; i < pSubmits->commandBufferCount; ++i)
+            {
+                std::stringstream cmd_buf_ptr;
+                cmd_buf_ptr << std::hex << pSubmits->pCommandBuffers[i];
+                ctx.AddDebugAnnotation<perfetto::DynamicString, perfetto::DynamicString>(
+                    perfetto::DynamicString{ "vkCommandBuffer: " + std::to_string(i) },
+                    perfetto::DynamicString(cmd_buf_ptr.str()));
+            }
+        });
+    }
+    else
+    {
+        TRACE_EVENT_INSTANT("GFXR", "vkQueueSubmit (empty)", [&](perfetto::EventContext ctx) {});
+    }
 }
 
 void PreProcess_QueuePresent(uint64_t block_index, VkQueue queue, const VkPresentInfoKHR* pPresentInfo)
