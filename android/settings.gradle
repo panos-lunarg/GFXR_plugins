@@ -1,4 +1,2 @@
 include ':capture'
 project(':capture').projectDir = file('perfetto/capture')
-include ':replay'
-project(':replay').projectDir = file('perfetto/replay')
